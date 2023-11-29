@@ -16,7 +16,7 @@ if __name__ == "__main__":
         name="ecs-hello-example",
         work_pool_name="my-ecs-pool",
         image=DeploymentImage(
-            name="455346737763.dkr.ecr.us-east-2.amazonaws.com/kevin-test-repo",
+            name="455346737763.dkr.ecr.us-east-2.amazonaws.com/ecs-example",
             tag=commit_hash,
             dockerfile="Dockerfile",
             platform="linux/amd64",
