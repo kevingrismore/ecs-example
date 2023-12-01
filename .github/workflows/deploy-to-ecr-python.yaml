@@ -3,7 +3,7 @@ name: Deploy to Amazon ECS
 on:
   push:
     branches:
-      - main
+      - yaml
 
 env:
   AWS_REGION: us-east-2 # set this to your preferred AWS region, e.g. us-west-1
@@ -29,11 +29,6 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@62f4f872db3836360b72999f4b87f1ff13310f3a
-
-      - uses: int128/create-ecr-repository-action@v1
-        id: ecr
-        with:
-          repository: ${{ github.repository }}
 
       - name: prefect deploy
         env:

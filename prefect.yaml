@@ -1,0 +1,44 @@
+name: ecs-example
+prefect-version: 2.14.1
+
+build:
+  - prefect.deployments.steps.run_shell_script:
+      id: get-commit-hash
+      script: git rev-parse --short HEAD
+      stream_output: false
+  - prefect.deployments.steps.run_shell_script:
+      id: build-repo-name
+      script: echo 455346737763.dkr.ecr.us-east-2.amazonaws.com/$REPOSITORY
+      stream_output: false
+      expand_env_vars: true
+  - prefect_docker.deployments.steps.build_docker_image:
+      id: build_image
+      requires: prefect-docker>=0.3.1
+      image_name: "{{ build-repo-name.stdout }}"
+      tag: "{{ get-commit-hash.stdout }}"
+      dockerfile: Dockerfile
+      platform: linux/amd64
+
+push:
+  - prefect_docker.deployments.steps.push_docker_image:
+      requires: prefect-docker>=0.3.1
+      image_name: "{{ build_image.image_name }}"
+      tag: "{{ build_image.tag }}"
+
+# pull section allows you to provide instructions for cloning this project in remote locations
+pull:
+
+# the deployments section allows you to provide configuration for deploying flows
+deployments:
+  - name: ecs-example
+    version:
+    tags: []
+    description:
+    schedule:
+    entrypoint: flow.py:hello
+    parameters: {}
+    work_pool:
+      name: my-ecs-pool
+      work_queue_name: default
+      job_variables:
+        image: "{{ build-image.image }}"
