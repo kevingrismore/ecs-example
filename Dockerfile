@@ -1,4 +1,3 @@
-FROM prefecthq/prefect:2.14.6-python3.11
-COPY . /opt/prefect/ecs-example/
-WORKDIR /opt/prefect/ecs-example/
+FROM prefecthq/prefect:2.14.9-python3.11
+COPY requirements.txt .
 RUN pip install -r requirements.txt

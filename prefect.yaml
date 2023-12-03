@@ -27,10 +27,14 @@ push:
 
 # pull section allows you to provide instructions for cloning this project in remote locations
 pull:
+  - prefect.deployments.steps.git_clone:
+      repository: git@github.com:kevingrismore/ecs-example.git
+      branch: build-without-code
+      access_token: "{{ prefect.blocks.secret.github-access-token}}"
 
 # the deployments section allows you to provide configuration for deploying flows
 deployments:
-  - name: ecs-example
+  - name: ecs-example-clone
     version:
     tags: []
     description:
