@@ -1,24 +1,13 @@
 from prefect import flow
-from prefect.deployments.runner import DeploymentImage
-from git import Repo
+import time
 
 
 @flow(log_prints=True)
 def hello():
-    print("Hello Prefect!")
+    for i in range(65):
+        time.sleep(60)
+        print(f"Running for {i + 1} minute(s)")
 
 
 if __name__ == "__main__":
-    repo = Repo()
-    commit_hash = repo.git.rev_parse("HEAD")
-
-    hello.deploy(
-        name="ecs-hello-example",
-        work_pool_name="my-ecs-pool",
-        image=DeploymentImage(
-            name="455346737763.dkr.ecr.us-east-2.amazonaws.com/ecs-example",
-            tag=commit_hash,
-            dockerfile="Dockerfile",
-            platform="linux/amd64",
-        ),
-    )
+    hello()

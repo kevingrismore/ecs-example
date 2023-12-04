@@ -8,7 +8,7 @@ build:
       stream_output: false
   - prefect.deployments.steps.run_shell_script:
       id: build-repo-name
-      script: echo 455346737763.dkr.ecr.us-east-2.amazonaws.com/$REPOSITORY
+      script: echo us-central1-docker.pkg.dev/prefect-sbx-sales-engineering/kevin-docker/$REPOSITORY
       stream_output: false
       expand_env_vars: true
   - prefect_docker.deployments.steps.build_docker_image:
@@ -28,7 +28,7 @@ push:
 # pull section allows you to provide instructions for cloning this project in remote locations
 pull:
   - prefect.deployments.steps.git_clone:
-      repository: git@github.com:kevingrismore/ecs-example.git
+      repository: https://github.com/kevingrismore/ecs-example.git
       branch: build-without-code
       access_token: "{{ prefect.blocks.secret.github-access-token}}"
 
@@ -42,7 +42,7 @@ deployments:
     entrypoint: flow.py:hello
     parameters: {}
     work_pool:
-      name: my-ecs-pool
+      name: cloud-run-v2-pool
       work_queue_name: default
       job_variables:
         image: "{{ build-image.image }}"
