@@ -7,14 +7,19 @@ build:
       script: git rev-parse --short HEAD
       stream_output: false
   - prefect.deployments.steps.run_shell_script:
-      id: build-repo-name
+      id: build-docker-repo-name
       script: echo us-central1-docker.pkg.dev/prefect-sbx-sales-engineering/kevin-docker/$REPOSITORY
+      stream_output: false
+      expand_env_vars: true
+  - prefect.deployments.steps.run_shell_script:
+      id: build-git-repo-name
+      script: echo https://github.com/kevingrismore/$REPOSITORY.git
       stream_output: false
       expand_env_vars: true
   - prefect_docker.deployments.steps.build_docker_image:
       id: build_image
       requires: prefect-docker>=0.3.1
-      image_name: "{{ build-repo-name.stdout }}"
+      image_name: "{{ build-docker-repo-name.stdout }}"
       tag: "{{ get-commit-hash.stdout }}"
       dockerfile: Dockerfile
       platform: linux/amd64
@@ -28,7 +33,7 @@ push:
 # pull section allows you to provide instructions for cloning this project in remote locations
 pull:
   - prefect.deployments.steps.git_clone:
-      repository: https://github.com/kevingrismore/ecs-example.git
+      repository: "{{ build-git-repo-name.stdout }}"
       branch: build-without-code
       access_token: "{{ prefect.blocks.secret.github-access-token}}"
 
