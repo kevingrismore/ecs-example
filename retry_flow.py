@@ -1,7 +1,7 @@
 from prefect import flow, task
 
 
-@flow
+@flow(retries=1)
 def testing_retries():
     successful_task()
     failing_task()
