@@ -1,3 +1,4 @@
 {
-  "hello": "flow.py:hello"
+  "hello": "flow.py:hello",
+  "testing-retries": "retry_flow.py:testing_retries"
 }

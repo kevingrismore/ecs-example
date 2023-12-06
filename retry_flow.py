@@ -9,7 +9,7 @@ def testing_retries():
 
 @task
 def successful_task():
-    print("good")
+    return True
 
 
 @task
