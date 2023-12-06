@@ -51,3 +51,16 @@ deployments:
       work_queue_name: default
       job_variables:
         image: "{{ build-image.image }}"
+
+  - name: retry-test
+    version:
+    tags: []
+    description:
+    schedule:
+    entrypoint: retry_flow.py:testing_retries
+    parameters: {}
+    work_pool:
+      name: cloud-run-v2-pool
+      work_queue_name: default
+      job_variables:
+        image: "{{ build-image.image }}"
