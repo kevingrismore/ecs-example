@@ -1,2 +1,3 @@
 prefect
 gitpython
+prefect-aws
